@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.product.dto.ProductAddRequest;
 import com.ecommerce.product.dto.ProductAddResponse;
+import com.ecommerce.product.dto.ProductUpdateRequest;
 import com.ecommerce.product.entity.Product;
 import com.ecommerce.product.repository.ProductRepository;
 
@@ -57,6 +58,31 @@ public class ProductService {
 	public List<Product> showAllProducts() {
 		return repo.findAll();
 
+	}
+	
+
+	public Product updateProduct(Long id, ProductUpdateRequest req) {
+
+	    Product product = repo.findById(id)
+	            .orElseThrow(() -> new RuntimeException("Product not found"));
+
+	    if (req.getName() != null) {
+	        product.setName(req.getName());
+	    }
+
+	    if (req.getDescription() != null) {
+	        product.setDescription(req.getDescription());
+	    }
+
+	    if (req.getPrice() != null) {
+	        product.setPrice(req.getPrice());
+	    }
+
+	    if (req.getQuantity() != null) {
+	        product.setQuantity(req.getQuantity());
+	    }
+
+	    return repo.save(product);
 	}
 
 }
