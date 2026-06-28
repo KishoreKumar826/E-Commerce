@@ -16,6 +16,12 @@ import jakarta.validation.constraints.Positive;
 @Table(name = "products")
 
 public class Product {
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", name=" + name + ", description=" + description + ", price=" + price
+				+ ", quantity=" + quantity + ", category=" + category + "]";
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

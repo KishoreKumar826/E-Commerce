@@ -1,10 +1,15 @@
 package com.ecommerce.product.service;
 
 import java.util.List;
+import java.util.Locale.Category;
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.ecommerce.product.dto.ProductAddRequest;
 import com.ecommerce.product.dto.ProductAddResponse;
@@ -40,6 +45,28 @@ public class ProductService {
 		return response;
 
 	}
+	
+	public Product getProductById(Long id) {
+	    return repo.findById(id)
+	            .orElseThrow(() -> new RuntimeException("Product not found"));
+	}
+	
+	public List<Product> searchByNameOrCategory(String name,String category) {
+		if (name != null && category != null) {
+	        return repo.findByNameOrCategoryContainingIgnoreCase(
+	                name, category);
+	    }
+
+	    if (name != null) {
+	        return repo.findByNameContainingIgnoreCase(name);
+	    }
+
+	    if (category != null) {
+	        return repo.findByCategoryContainingIgnoreCase(category);
+	    }
+
+	    return repo.findAll();
+	}
 
 	public String deleteProduct(Long id) {
 
@@ -58,6 +85,10 @@ public class ProductService {
 	public List<Product> showAllProducts() {
 		return repo.findAll();
 
+	}
+	//pagination
+	public Page<Product> getProducts(Pageable pageable) {
+	    return repo.findAll(pageable);
 	}
 	
 
